@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { BlockErrorBoundary } from "@/components/dashboard/block-error-boundary";
 import { CommentsBlock } from "@/components/dashboard/comments-block";
 import { PostsBlock } from "@/components/dashboard/posts-block";
 import {
@@ -33,21 +34,29 @@ export default function DashboardPage() {
       </header>
 
       <div className="grid items-start gap-6 md:grid-cols-2">
-        <Suspense fallback={<UsersSkeleton />}>
-          <UsersBlock />
-        </Suspense>
+        <BlockErrorBoundary blockName="Utilisateurs">
+          <Suspense fallback={<UsersSkeleton />}>
+            <UsersBlock />
+          </Suspense>
+        </BlockErrorBoundary>
 
-        <Suspense fallback={<CommentsSkeleton />}>
-          <CommentsBlock />
-        </Suspense>
+        <BlockErrorBoundary blockName="Commentaires">
+          <Suspense fallback={<CommentsSkeleton />}>
+            <CommentsBlock />
+          </Suspense>
+        </BlockErrorBoundary>
 
-        <Suspense fallback={<PostsSkeleton />}>
-          <PostsBlock />
-        </Suspense>
+        <BlockErrorBoundary blockName="Posts">
+          <Suspense fallback={<PostsSkeleton />}>
+            <PostsBlock />
+          </Suspense>
+        </BlockErrorBoundary>
 
-        <Suspense fallback={<TodosSkeleton />}>
-          <TodosBlock />
-        </Suspense>
+        <BlockErrorBoundary blockName="Todos">
+          <Suspense fallback={<TodosSkeleton />}>
+            <TodosBlock />
+          </Suspense>
+        </BlockErrorBoundary>
       </div>
     </main>
   );

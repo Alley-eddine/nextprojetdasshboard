@@ -31,5 +31,8 @@ export async function getTodos(): Promise<Todo[]> {
 
 export async function getComments(): Promise<Comment[]> {
   await delay(1500);
-  return fetchJson<Comment[]>("/comments?postId=1");
+  // Voluntarily broken endpoint (assignment requirement): the 404 makes the
+  // fetch throw so the block's error boundary kicks in while the other
+  // blocks keep working. Restore "/comments?postId=1" for real data.
+  return fetchJson<Comment[]>("/comments-broken?postId=1");
 }
