@@ -74,6 +74,8 @@ lib/
 
 Une erreur jetée par un Server Component pendant le streaming remonte à la boundary client la plus proche. Le fetch des commentaires est **volontairement cassé** (endpoint inexistant → 404 → `throw`) dans `lib/api.ts` : le bloc Commentaires affiche son UI d'erreur à ~1,5s pendant que les 3 autres blocs continuent de se charger et de s'afficher normalement.
 
+Le bloc en erreur propose un bouton **« Réessayer »**. Comme le Server Component a déjà été rendu (en échec) côté serveur, réinitialiser la boundary ne suffit pas : le bouton appelle `router.refresh()` (qui relance le rendu serveur, donc le fetch) **et** `reset()` de la boundary, le tout dans un `startTransition`. React remplace alors le rendu en échec par le nouveau payload serveur. Comme l'endpoint reste cassé dans cette démo, le bloc repasse par son skeleton puis ré-affiche l'erreur ; sur une vraie erreur transitoire, il afficherait les données.
+
 Pour rétablir le bloc, remettre `"/comments?postId=1"` dans `getComments()`.
 
 ## Contraintes du sujet respectées
