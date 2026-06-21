@@ -1,3 +1,4 @@
+import CountUp from "@/components/reactbits/CountUp";
 import { getUsers } from "@/lib/api";
 import { BlockCard } from "./block-card";
 
@@ -26,8 +27,8 @@ export async function UsersBlock() {
           </li>
         ))}
       </ul>
-      <p className="mt-4 text-xs text-zinc-400 dark:text-zinc-500">
-        {users.length} utilisateurs au total
+      <p className="mt-4 text-xs text-zinc-500">
+        <CountUp to={users.length} /> utilisateurs au total
       </p>
     </BlockCard>
   );

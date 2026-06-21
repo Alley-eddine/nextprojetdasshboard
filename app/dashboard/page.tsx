@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Aurora from "@/components/reactbits/Aurora";
+import GradientText from "@/components/reactbits/GradientText";
 import { BlockErrorBoundary } from "@/components/dashboard/block-error-boundary";
 import { CommentsBlock } from "@/components/dashboard/comments-block";
 import { PostsBlock } from "@/components/dashboard/posts-block";
@@ -22,12 +24,33 @@ export const metadata: Metadata = {
 // slowest block.
 export default function DashboardPage() {
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
+    <main className="relative mx-auto w-full max-w-5xl flex-1 px-6 py-10">
+      {/* Decorative animated background, kept behind the content and out of
+          the accessibility tree. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10"
+      >
+        <div className="absolute inset-x-0 top-0 h-[70vh] opacity-60">
+          <Aurora
+            colorStops={["#6366f1", "#8b5cf6", "#22d3ee"]}
+            amplitude={1.0}
+            blend={0.6}
+          />
+        </div>
+      </div>
+
       <header className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Dashboard
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <h1 className="sr-only">Dashboard</h1>
+        <div aria-hidden className="mb-1">
+          <GradientText
+            className="text-3xl font-bold mx-0! cursor-default!"
+            colors={["#818cf8", "#c084fc", "#22d3ee"]}
+          >
+            Dashboard
+          </GradientText>
+        </div>
+        <p className="text-sm text-zinc-400">
           Vue d&apos;ensemble du projet : chaque bloc s&apos;affiche dès que
           ses données sont prêtes.
         </p>
