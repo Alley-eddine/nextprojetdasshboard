@@ -4,11 +4,22 @@ type BlockCardProps = {
   title: string;
   delayLabel: string;
   children: ReactNode;
+  // Set on the skeleton variant so assistive tech announces the block as
+  // busy while its data streams in.
+  loading?: boolean;
 };
 
-export function BlockCard({ title, delayLabel, children }: BlockCardProps) {
+export function BlockCard({
+  title,
+  delayLabel,
+  children,
+  loading = false,
+}: BlockCardProps) {
   return (
-    <section className="flex flex-col rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <section
+      aria-busy={loading}
+      className="flex flex-col rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+    >
       <header className="flex items-center justify-between border-b border-zinc-200 px-5 py-3 dark:border-zinc-800">
         <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
           {title}
@@ -17,7 +28,10 @@ export function BlockCard({ title, delayLabel, children }: BlockCardProps) {
           {delayLabel}
         </span>
       </header>
-      <div className="flex-1 px-5 py-4">{children}</div>
+      <div className="flex-1 px-5 py-4">
+        {loading && <span className="sr-only">Chargement du bloc {title}…</span>}
+        {children}
+      </div>
     </section>
   );
 }

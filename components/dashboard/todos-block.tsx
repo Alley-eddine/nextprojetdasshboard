@@ -30,6 +30,9 @@ export async function TodosBlock() {
                   : "text-zinc-700 dark:text-zinc-300"
               }`}
             >
+              <span className="sr-only">
+                {todo.completed ? "Terminée : " : "À faire : "}
+              </span>
               {todo.title}
             </p>
           </li>
