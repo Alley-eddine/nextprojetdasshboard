@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import SpotlightCard from "@/components/reactbits/SpotlightCard";
 
 type BlockCardProps = {
   title: string;
@@ -16,22 +17,22 @@ export function BlockCard({
   loading = false,
 }: BlockCardProps) {
   return (
-    <section
-      aria-busy={loading}
-      className="flex flex-col rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-    >
-      <header className="flex items-center justify-between border-b border-zinc-200 px-5 py-3 dark:border-zinc-800">
-        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-          {title}
-        </h2>
-        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-          {delayLabel}
-        </span>
-      </header>
-      <div className="flex-1 px-5 py-4">
-        {loading && <span className="sr-only">Chargement du bloc {title}…</span>}
-        {children}
-      </div>
+    <section aria-busy={loading} className="h-full">
+      <SpotlightCard
+        className="flex h-full flex-col rounded-xl! border-zinc-800! bg-zinc-900/70! p-0! shadow-sm backdrop-blur-sm"
+        spotlightColor="rgba(129, 140, 248, 0.18)"
+      >
+        <header className="flex items-center justify-between border-b border-zinc-800 px-5 py-3">
+          <h2 className="text-sm font-semibold text-zinc-50">{title}</h2>
+          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400">
+            {delayLabel}
+          </span>
+        </header>
+        <div className="flex-1 px-5 py-4">
+          {loading && <span className="sr-only">Chargement du bloc {title}…</span>}
+          {children}
+        </div>
+      </SpotlightCard>
     </section>
   );
 }
