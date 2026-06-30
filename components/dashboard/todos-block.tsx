@@ -1,3 +1,4 @@
+import CountUp from "@/components/reactbits/CountUp";
 import { getTodos } from "@/lib/api";
 import { BlockCard } from "./block-card";
 
@@ -7,8 +8,8 @@ export async function TodosBlock() {
 
   return (
     <BlockCard title="Todos" delayLabel="~3s">
-      <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">
-        {doneCount} / {todos.length} terminées
+      <p className="mb-3 text-xs text-zinc-400">
+        <CountUp to={doneCount} /> / <CountUp to={todos.length} /> terminées
       </p>
       <ul className="space-y-2">
         {todos.slice(0, 8).map((todo) => (
@@ -30,6 +31,9 @@ export async function TodosBlock() {
                   : "text-zinc-700 dark:text-zinc-300"
               }`}
             >
+              <span className="sr-only">
+                {todo.completed ? "Terminée : " : "À faire : "}
+              </span>
               {todo.title}
             </p>
           </li>

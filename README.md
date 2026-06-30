@@ -45,8 +45,13 @@ components/dashboard/
   todos-block.tsx               → Server Component async (fetch /todos?userId=1)
   comments-block.tsx            → Server Component async (fetch volontairement cassé)
   skeletons.tsx                 → 4 skeletons personnalisés, calqués sur le contenu réel de chaque bloc
-  block-error-boundary.tsx      → error boundary client (seul "use client" du projet)
-  block-card.tsx                → carte UI partagée
+  block-error-boundary.tsx      → error boundary client avec bouton « Réessayer »
+  block-card.tsx                → carte UI partagée (enveloppée dans un SpotlightCard)
+components/reactbits/           → composants UI vendorés depuis reactbits.dev (clients)
+  Aurora.tsx                    → fond animé WebGL (ogl)
+  GradientText.tsx              → titre animé (motion)
+  SpotlightCard.tsx             → effet de surbrillance au survol des cartes
+  CountUp.tsx                   → compteurs animés (motion)
 lib/
   delay.ts                      → fonction de simulation de latence du sujet (non modifiée)
   api.ts                        → un fetch indépendant par bloc (cache: "no-store")
@@ -74,12 +79,29 @@ lib/
 
 Une erreur jetée par un Server Component pendant le streaming remonte à la boundary client la plus proche. Le fetch des commentaires est **volontairement cassé** (endpoint inexistant → 404 → `throw`) dans `lib/api.ts` : le bloc Commentaires affiche son UI d'erreur à ~1,5s pendant que les 3 autres blocs continuent de se charger et de s'afficher normalement.
 
+Le bloc en erreur propose un bouton **« Réessayer »**. Comme le Server Component a déjà été rendu (en échec) côté serveur, réinitialiser la boundary ne suffit pas : le bouton appelle `router.refresh()` (qui relance le rendu serveur, donc le fetch) **et** `reset()` de la boundary, le tout dans un `startTransition`. React remplace alors le rendu en échec par le nouveau payload serveur. Comme l'endpoint reste cassé dans cette démo, le bloc repasse par son skeleton puis ré-affiche l'erreur ; sur une vraie erreur transitoire, il afficherait les données.
+
 Pour rétablir le bloc, remettre `"/comments?postId=1"` dans `getComments()`.
+
+### Accessibilité
+
+- `aria-busy` sur chaque bloc pendant son chargement, avec un texte `sr-only` « Chargement du bloc … ».
+- Statut des todos (terminée / à faire) exposé en `sr-only` (le barré est purement visuel).
+- Le fond animé et le titre dégradé sont décoratifs (`aria-hidden`) ; un vrai `<h1>` en `sr-only` porte le titre pour les lecteurs d'écran.
+- `prefers-reduced-motion` neutralise le pulse des skeletons et les transitions.
+
+### Personnalisation UI (React Bits)
+
+L'interface utilise quelques composants de [React Bits](https://reactbits.dev) (thème sombre, fond **Aurora** WebGL, **titre dégradé**, **cartes à surbrillance**, **compteurs animés**). Ce sont des composants tiers copiés dans `components/reactbits/` (on les possède) ; seul un `"use client"` a été ajouté en tête. Ils sont exclus du lint, comme tout code vendoré.
+
+Point d'architecture important : ces composants animés sont des **composants client**, mais ils n'habillent que la couche présentation. Les composants de **données** restent des Server Components async — ils se contentent d'**embarquer** des composants client (`CountUp`, `SpotlightCard`) sans jamais porter `"use client"` eux-mêmes. Le streaming et les boundaries Suspense sont inchangés.
+
+Dépendances ajoutées : `motion` (animations) et `ogl` (rendu WebGL du fond Aurora).
 
 ## Contraintes du sujet respectées
 
 - ✅ App Router uniquement (`/app`)
-- ✅ Aucun `use client` sur les composants de données (le seul composant client est l'error boundary, qui ne touche pas aux données)
+- ✅ Aucun `use client` sur les composants de données (les seuls composants client sont l'error boundary et les éléments décoratifs React Bits, qui ne touchent pas aux données)
 - ✅ Aucun `useEffect` / fetch côté client pour les données
 - ✅ Suspense avec boundaries granulaires (une par bloc)
 - ✅ Skeleton personnalisé par bloc, pas de spinner global
@@ -88,4 +110,4 @@ Pour rétablir le bloc, remettre `"/comments?postId=1"` dans `getComments()`.
 
 ## Stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript strict · Tailwind CSS 4 · [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript strict · Tailwind CSS 4 · [React Bits](https://reactbits.dev) (motion, ogl) · [JSONPlaceholder](https://jsonplaceholder.typicode.com/)

@@ -13,7 +13,7 @@ function Line({ className }: { className: string }) {
 
 export function UsersSkeleton() {
   return (
-    <BlockCard title="Utilisateurs" delayLabel="~1s">
+    <BlockCard title="Utilisateurs" delayLabel="~1s" loading>
       <ul className="space-y-3">
         {Array.from({ length: 5 }, (_, i) => (
           <li key={i} className="flex items-center gap-3">
@@ -32,7 +32,7 @@ export function UsersSkeleton() {
 
 export function PostsSkeleton() {
   return (
-    <BlockCard title="Posts" delayLabel="~2s">
+    <BlockCard title="Posts" delayLabel="~2s" loading>
       <ul className="space-y-3">
         {Array.from({ length: 10 }, (_, i) => (
           <li key={i} className="flex items-center gap-2">
@@ -47,7 +47,7 @@ export function PostsSkeleton() {
 
 export function TodosSkeleton() {
   return (
-    <BlockCard title="Todos" delayLabel="~3s">
+    <BlockCard title="Todos" delayLabel="~3s" loading>
       <Line className="mb-4 h-2.5 w-1/4" />
       <ul className="space-y-3">
         {Array.from({ length: 8 }, (_, i) => (
@@ -63,7 +63,7 @@ export function TodosSkeleton() {
 
 export function CommentsSkeleton() {
   return (
-    <BlockCard title="Commentaires" delayLabel="~1,5s">
+    <BlockCard title="Commentaires" delayLabel="~1,5s" loading>
       <ul className="space-y-4">
         {Array.from({ length: 5 }, (_, i) => (
           <li key={i} className="space-y-1.5">
