@@ -2,6 +2,10 @@
 
 > **Élève : Alley Ben Hassine**
 
+[![Déployé sur Vercel](https://img.shields.io/badge/Vercel-déployé-000?logo=vercel)](https://nextprojetdasshboard.vercel.app)
+
+**Démo en ligne : https://nextprojetdasshboard.vercel.app**
+
 Dashboard analytique pour une application de gestion de projets. La page `/dashboard` affiche 4 blocs de données indépendants (utilisateurs, posts, todos, commentaires) **streamés indépendamment** : chaque bloc apparaît dès que ses données sont disponibles, sans jamais bloquer les autres ni la page.
 
 ## Lancer le projet
